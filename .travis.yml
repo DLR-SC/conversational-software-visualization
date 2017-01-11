@@ -3,6 +3,10 @@ sudo: required
 services:
   - docker
 
+install: true
+
+script: exit 0
+
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::8}
