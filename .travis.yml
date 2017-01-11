@@ -14,7 +14,7 @@ env:
 
 script:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD hub.docker.com
-  - export REPO=stefan125/sofia-context-service
+  - export REPO=hub.docker.com/stefan125/sofia-context-service
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
   - docker build -f service-context/Dockerfile -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
