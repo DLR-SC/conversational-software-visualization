@@ -1,4 +1,4 @@
-let Server = require("./Server").Server
+let Server = require("./server").Server
 
 let router_url = process.env.WAMP_ROUTER_URL ? process.env.WAMP_ROUTER_URL :  "ws://wamp_router:8080/ws" ;
 
@@ -18,4 +18,4 @@ server.start().then((connection)=>{
 });
 
 
-modules.exports = Server;
+module.exports = Server;
