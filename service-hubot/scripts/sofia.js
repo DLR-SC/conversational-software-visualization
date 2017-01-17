@@ -34,6 +34,10 @@ module.exports = function(robot) {
   connection.onopen = function (sess) {
     console.log("Connection is open to ", router_url, router_realm);
     session = sess;
+    session.subscribe('sofia.messages.OUTGOING_MESSAGE', function (args) {
+      var msg = args[0];
+      robot.send(msg.channel,msg.text)
+  });
   };
   connection.onclose = function (reason, details) {
     if (reason == "unreachable" || reason == "unsupported"){
@@ -48,10 +52,6 @@ module.exports = function(robot) {
     res.send("Mew mew mew~");
   });
 
-  session.subscribe('sofia.messages.OUTGOING_MESSAGE', function (args) {
-    var msg = args[0];
-    robot.send(msg.channel,msg.text)
-  });
   robot.hear(/.*/, function (robot,msg,match,envelope) {
       if (session == undefined){
         robot.send("Oh we got a problem here.... ");
