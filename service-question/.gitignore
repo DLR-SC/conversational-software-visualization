@@ -1,1 +1,4 @@
 ./node_
+/env/
+
+/sofia_question_service.egg-info/
