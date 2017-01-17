@@ -35,8 +35,10 @@ module.exports = function(robot) {
     console.log("Connection is open to ", router_url, router_realm);
     session = sess;
     session.subscribe('sofia.messages.OUTGOING_MESSAGE', function (args) {
+      console.log("Got outgoing msg");
+      console.log(arguments);
       var msg = args[0];
-      robot.send(msg.channel,msg.text)
+      robot.send({room: msg.channel},msg.text)
   });
   };
   connection.onclose = function (reason, details) {
@@ -52,12 +54,14 @@ module.exports = function(robot) {
     res.send("Mew mew mew~");
   });
 
-  robot.hear(/.*/, function (robot,msg,match,envelope) {
+  robot.hear(/.*/, function (res) {
       if (session == undefined){
         robot.send("Oh we got a problem here.... ");
         robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
         return
       }
-      session.publish('sofia.messages.INCOMING_MESSAGE', [msg]);
+      console.log(res);
+      console.log("Send the message " + [res.message] + " to the router");
+      session.publish('sofia.messages.INCOMING_MESSAGE', [res.message]);
   })
 };
