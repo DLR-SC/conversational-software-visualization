@@ -5,8 +5,9 @@ let ArgumentException = require('./../src/server').ArgumentException;
 let connectToServer = require('./../src/utils').connectToServer;
 let debug = require("debug")("sofia");
 
-let TEST_SERVER = "ws://192.168.99.100:8080/ws";
-let TEST_RELAM  = "realm1";
+let router_url = process.env.WAMP_ROUTER_URL ? process.env.WAMP_ROUTER_URL :  "ws://wamp_router:8000/ws" ;
+
+let router_realm = process.env.WAMP_RELAM ? process.env.WAMP_RELAM :  "realm1";
 
 describe('Connect to Router', function() {
 
@@ -33,7 +34,7 @@ describe('Connect to Router', function() {
 });
 
 function startServer() {
-  let server = new Server(TEST_SERVER, TEST_RELAM);
+  let server = new Server(router_url, router_realm);
   server.start();
 }
 describe("Ask questions should emit events", function () {
@@ -64,7 +65,7 @@ describe("Ask questions should emit events", function () {
             }).catch(reject);
 
         }
-        connectToServer(TEST_SERVER,TEST_RELAM, setupSession).catch(reject);
+        connectToServer(router_url,router_realm, setupSession).catch(reject);
 
        })
 
