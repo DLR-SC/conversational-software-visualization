@@ -1,6 +1,6 @@
 let Server = require("./Server").Server
 
-let router_url = process.env.WAMP_ROUTER_URL ? process.env.WAMP_ROUTER_URL :  "ws://wamp_router:8000/ws" ;
+let router_url = process.env.WAMP_ROUTER_URL ? process.env.WAMP_ROUTER_URL :  "ws://wamp_router:8080/ws" ;
 
 let router_realm = process.env.WAMP_RELAM ? process.env.WAMP_RELAM :  "realm1";
 
