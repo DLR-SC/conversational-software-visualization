@@ -23,7 +23,10 @@ class QuestionComponent(ApplicationSession):
             if len(args) != 1:
                 raise Exception("Invalid arguemnt")
             incoming_msg = args[0]
-            self.publish(u'sofia.messages.OUTGOING_MESSAGE', u'The force will be with you always')
+            self.publish(u'sofia.messages.OUTGOING_MESSAGE', {
+                "text": u'The force will be with you always',
+                "channel": u'GENERAL'
+                                                              })
 
 
         await self.subscribe(got_message, u'sofia.messages.INCOMING_MESSAGE')
