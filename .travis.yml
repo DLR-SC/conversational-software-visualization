@@ -13,12 +13,12 @@ env:
   - secure: XKak3jHZ3pMI7EbKrF6OmAczhKqRdQLES7QRxMUdz8ESAHWNbuEgP7LZQme2AY8APQDIdTp1mgwp24D8j1F6hQaEwCe++hd55nJDItJh9kHoy2hrJlYLixgaiiJKvkzkzKJ3w8mD0jDAqfsd1fkN/BPeWdDu5hpElOeqLQY1uW2TZKrKMtmDr3YhrXVVCojLabyu9wmnFqLOzbDo5jqiDpuBEltRRG15Fo/hyxz4bbfnaecBT9PuvymA9lF/cdYxizcYjRRN82v9xkmKpVTLmwR6XFyOb+2gp1G+ubMQY1B14QHU+39PDdKYwnIHcaZl+w47YrwOa2XOM4GsA8xWUMkel3osJqpwJIs5dzEISX6FQdJjFiQcsrMIk+MXA7Czm1oLnmFT2YmqdyW4meOns+AuLhP3WhwsUeKby7ZteIvA20fwhnI2kH2rle2yAeeoZf4tnBbDOrBunG0Lz5hhCzCx/pdz6otsWhfmLW0CRG6hyePSNXQCki468H7UbmSJqW/KQQcWwUCP8yEoe23RIA3DIDsBxiFmkirIeEOmxeFQIaiMN96M0sBjrIlba2Hdvkw2xNTEKeRPE4kTXB60VZXhSpmyjVaPicyZ71GiHHeo89HfUZiQUax/mlancK8ZJg13MTfgJFtFZEm+2vzqs9HZH4xlChuCqtwe7O1uEWg=
 
 script:
-  - docker -v
-  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - export REPO=stefan125/sofia-context-service
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-  - docker build -f service-context/Dockerfile -t $REPO:$COMMIT .
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
+  #- docker -v
+  #- docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
+  #- export REPO=stefan125/sofia-context-service
+  #- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+  #- docker build -f service-context/Dockerfile -t $REPO:$COMMIT .
+  #- docker tag $REPO:$COMMIT $REPO:$TAG
+  #- docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  #- docker push $REPO
 
