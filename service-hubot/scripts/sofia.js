@@ -48,12 +48,16 @@ module.exports = function(robot) {
     res.send("Mew mew mew~");
   });
 
+  session.subscribe('sofia.messages.OUTGOING_MESSAGE', function (args) {
+    var msg = args[0];
+    robot.send(msg.channel,msg.text)
+  });
   robot.hear(/.*/, function (robot,msg,match,envelope) {
       if (session == undefined){
         robot.send("Oh we got a problem here.... ");
         robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
         return
       }
-      session.publish('sofia.messages.SENTENCE', [msg]);
+      session.publish('sofia.messages.INCOMING_MESSAGE', [msg]);
   })
 };
