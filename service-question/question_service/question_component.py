@@ -19,25 +19,12 @@ class QuestionComponent(ApplicationSession):
 
     async def onJoin(self, details):
 
-        def ping():
-            return
+        def got_message(args):
+            if len(args) != 1:
+                raise Exception("Invalid arguemnt")
+            incoming_msg = args[0]
+            self.publish(u'sofia.messages.OUTGOING_MESSAGE', u'The force will be with you always')
 
-        def add2(a, b):
-            return a + b
 
-        def stars(nick="somebody", stars=0):
-            return u"{} starred {}x".format(nick, stars)
-
-        # noinspection PyUnusedLocal
-        def orders(product, limit=5):
-            return [u"Product {}".format(i) for i in range(50)][:limit]
-
-        def arglen(*args, **kwargs):
-            return [len(args), len(kwargs)]
-
-        await self.register(ping, u'com.arguments.ping')
-        await self.register(add2, u'com.arguments.add2')
-        await self.register(stars, u'com.arguments.stars')
-        await self.register(orders, u'com.arguments.orders')
-        await self.register(arglen, u'com.arguments.arglen')
+        await self.subscribe(got_message, u'sofia.messages.INCOMING_MESSAGE')
         print("Registered methods; ready for actions.")
