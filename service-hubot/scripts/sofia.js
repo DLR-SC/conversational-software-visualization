@@ -69,7 +69,7 @@ module.exports = function(robot) {
           session.publish('sofia.messages.INCOMING_MESSAGE', [res.message]);
       }
       else {
-          console.log("wrong channel...")
+          console.log("wrong channel... Got channel " + res.message.room.toUpperCase()  + "  but exptected " + env.toUpperCase() )
       }
 
 
