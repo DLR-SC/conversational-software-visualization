@@ -22,6 +22,8 @@ var router_url = process.env.WAMP_ROUTER_URL ? process.env.WAMP_ROUTER_URL :  "w
 
 var router_realm = process.env.WAMP_RELAM ? process.env.WAMP_RELAM :  "realm1";
 
+var env = process.env.env ? process.env.env.toUpperCase() :  "production";
+
 module.exports = function(robot) {
 
   var session = undefined;
@@ -60,8 +62,16 @@ module.exports = function(robot) {
         robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
         return
       }
-      console.log(res);
-      console.log("Send the message " + [res.message] + " to the router");
-      session.publish('sofia.messages.INCOMING_MESSAGE', [res.message]);
+
+      if(res.message.room.toUpperCase() == env.toUpperCase()){
+
+          console.log("Send the message " + [res.message] + " to the router");
+          session.publish('sofia.messages.INCOMING_MESSAGE', [res.message]);
+      }
+      else {
+          console.log("wrong channel...")
+      }
+
+
   })
 };
