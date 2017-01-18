@@ -1,0 +1,2 @@
+# Service Hubot 
+[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=B-Stefan&repoName=Sofia&branch=master&pipelineName=Sofia-service-hubot&accountName=B-Stefan&type=cf-1)]( https://g.codefresh.io/repositories/B-Stefan/Sofia/builds?filter=trigger:build;branch:master;service:587e5febc07e7d01005bf971~Sofia-service-hubot)
