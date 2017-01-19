@@ -41,7 +41,7 @@ module.exports = function(robot) {
       var msg = args[0];
       console.log("Got outgoing msg for channel " +msg.channel+ " and msg: " + msg.text);
       robot.adapter.chatdriver.sendMessageByRoomId(msg.text,msg.channel)
-  },{match:"wildcard"});
+  },{ match: "wildcard" });
   };
   connection.onclose = function (reason, details) {
     if (reason == "unreachable" || reason == "unsupported"){
@@ -64,7 +64,7 @@ module.exports = function(robot) {
       }
       var topic = 'sofia.channel.'+res.message.room.toLowerCase()+'.messages.INCOMING_MESSAGE';
       console.log("Forward  message to " + topic);
-      console.log(res)
+      console.log(res);
       session.publish(topic, [res.message]);
 
   })
