@@ -47,11 +47,13 @@ module.exports = function (robot) {
                 "use strict";
                 console.log("room id " + roomId)
             });
-            robot.adapter.chatdriver.sendMessageByRoomId({msg: msg.text}, msg.channel).catch(function (err) {
+            console.log(robot.adapter.chatdriver.sendMessageByRoomId(msg.text, msg.channel)
+            .then(function () {
+                console.log("Message sent")
+            }).catch(function (err) {
                 console.error(err)
-            }).then(function (result) {
-                console.log("Message sent ")
-            })
+            }));
+
         }, {match: "wildcard"});
     };
     connection.onclose = function (reason, details) {
