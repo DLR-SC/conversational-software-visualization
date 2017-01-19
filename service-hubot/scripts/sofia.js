@@ -43,6 +43,7 @@ module.exports = function (robot) {
             var msg = args[0];
             console.log("Got outgoing msg for channel " + msg.channel + " and msg: " + msg.text);
             robot.adapter.chatdriver.sendMessageByRoomId(msg.text, msg.channel)
+            console.log("room id " + robot.adapter.chatdriver.getRoomId(msg.channel))
         }, {match: "wildcard"});
     };
     connection.onclose = function (reason, details) {
