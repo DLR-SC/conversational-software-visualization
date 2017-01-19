@@ -1,6 +1,10 @@
-from autobahn.asyncio.wamp import ApplicationRunner
+import txaio
+txaio.use_asyncio()
+
 from os import environ
 from question_service.question_component import QuestionComponent
+from autobahn_autoreconnect import ApplicationRunner
+
 
 
 if __name__ == '__main__':

@@ -43,6 +43,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "autobahn==0.17.1"
+        "autobahn-autoreconnect==0.0.1"
     ],
     extras_require={
         'test': tests_require,
