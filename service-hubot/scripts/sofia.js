@@ -37,9 +37,9 @@ module.exports = function(robot) {
     console.log("Connection is open to ", router_url, router_realm);
     session = sess;
     session.subscribe('sofia.channel..messages.OUTGOING_MESSAGE', function (args,obj,event) {
-      console.log("Got outgoing msg");
       console.log(arguments);
       var msg = args[0];
+      console.log("Got outgoing msg for channel " +msg.channel+ " and msg: " + msg.text);
       robot.adapter.chatdriver.sendMessageByRoomId(msg.text,msg.channel)
   },{match:"wildcard"});
   };
@@ -64,6 +64,7 @@ module.exports = function(robot) {
       }
       var topic = 'sofia.channel.'+res.message.room.toLowerCase()+'.messages.INCOMING_MESSAGE';
       console.log("Forward  message to " + topic);
+      console.log(res)
       session.publish(topic, [res.message]);
 
   })
