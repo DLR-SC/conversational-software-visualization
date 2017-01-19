@@ -25,7 +25,7 @@ var router_realm = process.env.WAMP_RELAM ? process.env.WAMP_RELAM : "realm1";
 var env = process.env.env ? process.env.env.toUpperCase() : "production";
 
 module.exports = function (robot) {
-    console.log("Verson 1   ");
+    console.log("Verson 2   ");
 
     var session = undefined;
 
@@ -42,8 +42,9 @@ module.exports = function (robot) {
             console.log(arguments);
             var msg = args[0];
             console.log("Got outgoing msg for channel " + msg.channel + " and msg: " + msg.text);
+            console.log(robot.adapter.chatdriver)
+            console.log("room id " + robot.adapter.chatdriver.getRoomId(msg.channel));
             robot.adapter.chatdriver.sendMessageByRoomId(msg.text, msg.channel)
-            console.log("room id " + robot.adapter.chatdriver.getRoomId(msg.channel))
         }, {match: "wildcard"});
     };
     connection.onclose = function (reason, details) {
