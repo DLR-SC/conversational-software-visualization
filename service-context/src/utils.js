@@ -26,3 +26,32 @@ module.exports.connectToServer = function(url,relam,sessionFn){
 
   })
 };
+/**
+ * Transform  sofia.session.1000.messages.PROJECT into 1000
+ * @param events
+ * @returns {*}
+ */
+module.exports.getChannelIdFromEvent = function(event){
+  "use strict";
+  let topic = event.topic ?  event.topic: event.procedure;
+  return topic.split(".").reduce((accumulator,current,currentIndex,array)=>{
+    if (current == "channel"){
+      return array[currentIndex+1];
+    }
+    return accumulator
+  })
+};
+/**
+ *  Transform  sofia.session.1000.messages.PROJECT into PROJECT
+ * @param event
+ * @returns {*}
+ */
+module.exports.getSchemaTypeFromEvent = function (event) {
+  let topic = event.topic ?  event.topic: event.procedure;
+  return topic.split(".").reduce((accumulator,current,currentIndex,array)=>{
+    if (current == "messages" || current == "rpc"){
+      return array[currentIndex+1];
+    }
+    return accumulator
+  })
+};

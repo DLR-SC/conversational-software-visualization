@@ -35,7 +35,7 @@ describe('Connect to Router', function() {
 
 function startServer() {
   let server = new Server(router_url, router_realm);
-  server.start();
+  return server.start();
 }
 describe("Ask questions should emit events", function () {
 
@@ -43,26 +43,22 @@ describe("Ask questions should emit events", function () {
     return startServer()
   });
 
-  it('"Wo finde ich Klasse xyz " should emit the event DISPLAY_CLASS', function () {
+  it('"Should store the project confiuration', function () {
 
+    let testContextInformation = {repository:"test"}
     return new Promise((resolve,reject)=>{
 
         function setupSession(session){
+            debug("Publish project configuration");
+            session.publish('sofia.channel.1000.messages.PROJECT', [testContextInformation]);
+            debug("Try to rpc");
+            session.call('sofia.channel.1000.rpc.PROJECT.getContext').then((projectContext)=>{
+              debug("Got result from RPC call", projectContext);
+              chai.expect(JSON.stringify(projectContext)).to.be.equal(JSON.stringify(testContextInformation));
+              resolve()
 
-            function onMessage(args){
-              let msg = args[0];
+            }).catch(reject)
 
-              if(msg.className == "xyz"){
-              debug("got right event:", msg);
-                resolve(msg)
-              }
-
-            }
-            session.subscribe('sofia.messages.DISPLAY_CLASS', onMessage).then(()=> {
-
-              session.publish('sofia.messages.SENTENCE', ["Wo finde ich Klasse xyz"])
-
-            }).catch(reject);
 
         }
         connectToServer(router_url,router_realm, setupSession).catch(reject);

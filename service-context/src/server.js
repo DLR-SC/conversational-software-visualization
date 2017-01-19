@@ -1,6 +1,7 @@
 let autobahn = require('autobahn');
 let connectToServer = require("./utils").connectToServer;
 let debug = require("debug")("sofia");
+let ProjectContextComponent = require("./projectContextComponent");
 class ArgumentException extends Error{
 
 }
@@ -15,11 +16,17 @@ class Server {
     if(realm == null || realm == undefined || typeof realm != "string"){
       throw  new ArgumentException("Argument: realm  should be a simple string like 'relam1' ")
     }
+
     this.connection = null;
     this.router_realm = realm;
     this.router_url = wamp_router_url;
+    this.components = [];
+    this.initComponents();
   }
 
+  initComponents(){
+    this.components.push(new ProjectContextComponent())
+  }
   _connect(setupSessionFn){
 
     if(this.connection != null) {
@@ -32,33 +39,16 @@ class Server {
     });
 
   }
-  sayHello(){
 
+  onJoin(session){
+    return Promise.all(this.components.map((component)=>component.onJoin(session)))
+        .then(()=>{debug("Joined session successful");})
+        .catch(()=>{throw new Error(arguments)})
   }
 
   start(){
-    return this._connect((session) => {
 
-      // SUBSCRIBE to a topic and receive events
-      //
-      function onSentence (args) {
-        let sentence = args[0];
-
-        if(sentence == "Wo finde ich Klasse xyz"){
-          debug("Got event DISPLAY_CLASS");
-          session.publish('sofia.messages.DISPLAY_CLASS', [{className: 'xyz'}])
-        }
-      }
-      session.subscribe('sofia.messages.SENTENCE', onSentence).then(
-          function (sub) {
-            debug("subscribed to topic 'onhello'");
-          },
-          function (err) {
-            debug("failed to subscribed: " + err);
-          }
-      );
-
-    });
+    return this._connect(this.onJoin.bind(this));
 
   }
 }
