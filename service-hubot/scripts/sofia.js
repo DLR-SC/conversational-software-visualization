@@ -62,7 +62,9 @@ module.exports = function(robot) {
         robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
         return
       }
-      session.publish('sofia.channel.'+res.message.room.toLowerCase()+'.messages.INCOMING_MESSAGE', [res.message]);
+      var topic = 'sofia.channel.'+res.message.room.toLowerCase()+'.messages.INCOMING_MESSAGE';
+      console.log("Forward  message to " + topic);
+      session.publish(topic, [res.message]);
 
   })
 };
