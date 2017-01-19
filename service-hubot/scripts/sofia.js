@@ -42,12 +42,16 @@ module.exports = function (robot) {
             console.log(arguments);
             var msg = args[0];
             console.log("Got outgoing msg for channel " + msg.channel + " and msg: " + msg.text);
-            console.log(robot.adapter.chatdriver)
+            console.log(robot.adapter.chatdriver);
             robot.adapter.chatdriver.getRoomId(msg.channel).then(function(roomId){
                 "use strict";
                 console.log("room id " + roomId)
             });
-            robot.adapter.chatdriver.sendMessageByRoomId({msg: msg.text}, msg.channel).catch()
+            robot.adapter.chatdriver.sendMessageByRoomId({msg: msg.text}, msg.channel).catch(function (err) {
+                console.error(err)
+            }).then(function (result) {
+                console.log("Message sent ")
+            })
         }, {match: "wildcard"});
     };
     connection.onclose = function (reason, details) {
@@ -69,7 +73,7 @@ module.exports = function (robot) {
             robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
             return
         }
-        var topic = 'sofia.channel.' + res.message.room.toLowerCase() + '.messages.INCOMING_MESSAGE';
+        var topic = 'sofia.channel.' + res.message.room + '.messages.INCOMING_MESSAGE';
         console.log("Forward  message to " + topic);
         console.log(res);
         session.publish(topic, [res.message]);
