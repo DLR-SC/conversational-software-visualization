@@ -42,8 +42,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "autobahn==0.17.1"
-        "autobahn-autoreconnect==0.0.1"
+        "autobahn==0.17.1",
+        "autobahn-autoreconnect==0.1.0"
     ],
     extras_require={
         'test': tests_require,
