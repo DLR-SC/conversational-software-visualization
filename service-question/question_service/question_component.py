@@ -30,5 +30,5 @@ class QuestionComponent(ApplicationSession):
                                                               })
 
 
-        await self.subscribe(got_message, u'sofia.channel..messages.INCOMING_MESSAGE',{'match': 'wildecard'})
+        await self.subscribe(got_message, u'sofia.channel..messages.INCOMING_MESSAGE',{'match': 'wildcard'})
         print("Registered methods; ready for actions. Give me some... ")
