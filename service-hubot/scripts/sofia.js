@@ -66,6 +66,7 @@ module.exports = function(robot) {
       console.log("Forward  message to " + topic);
       console.log(res);
       session.publish(topic, [res.message]);
+      console.log("Published.... ");
 
   })
 };
