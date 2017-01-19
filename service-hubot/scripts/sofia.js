@@ -40,7 +40,7 @@ module.exports = function(robot) {
       console.log("Got outgoing msg");
       console.log(arguments);
       var msg = args[0];
-      robot.send({room: msg.channel},msg.text)
+      robot.adapter.chatdriver.sendMessageByRoomId(msg.channel,msg.text)
   },{match:"wildcard"});
   };
   connection.onclose = function (reason, details) {
