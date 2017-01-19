@@ -36,12 +36,12 @@ module.exports = function(robot) {
   connection.onopen = function (sess) {
     console.log("Connection is open to ", router_url, router_realm);
     session = sess;
-    session.subscribe('sofia.messages.OUTGOING_MESSAGE', function (args) {
+    session.subscribe('sofia.channel..messages.OUTGOING_MESSAGE', function (args,obj,event) {
       console.log("Got outgoing msg");
       console.log(arguments);
       var msg = args[0];
       robot.send({room: msg.channel},msg.text)
-  });
+  },{match:"wildcard"});
   };
   connection.onclose = function (reason, details) {
     if (reason == "unreachable" || reason == "unsupported"){
@@ -62,16 +62,7 @@ module.exports = function(robot) {
         robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
         return
       }
-
-      if(res.message.room.toUpperCase() == env.toUpperCase()){
-
-          console.log("Send the message " + [res.message] + " to the router");
-          session.publish('sofia.messages.INCOMING_MESSAGE', [res.message]);
-      }
-      else {
-          console.log("wrong channel... Got channel " + res.message.room.toUpperCase()  + "  but exptected " + env.toUpperCase() )
-      }
-
+      session.publish('sofia.channel.'+res.message.room.toLowerCase()+'.messages.INCOMING_MESSAGE', [res.message]);
 
   })
 };
