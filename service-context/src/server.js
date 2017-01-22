@@ -1,7 +1,7 @@
 let autobahn = require('autobahn');
 let connectToServer = require("./utils").connectToServer;
 let debug = require("debug")("sofia");
-let ProjectContextComponent = require("./projectContextComponent");
+let ProjectContextComponent = require("./ContextComponent");
 class ArgumentException extends Error{
 
 }

@@ -45,12 +45,12 @@ describe("Ask questions should emit events", function () {
 
   it('"Should store the project confiuration', function () {
 
-    let testContextInformation = {repository:"test"}
+    let testContextInformation = {repository:"test"};
     return new Promise((resolve,reject)=>{
 
         function setupSession(session){
             debug("Publish project configuration");
-            session.publish('sofia.channel.1000.messages.PROJECT', [testContextInformation]);
+            session.publish('sofia.channel.1000.messages.PROJECT.v-0-0-1', [testContextInformation]);
             debug("Try to rpc");
             session.call('sofia.channel.1000.rpc.PROJECT.getContext').then((projectContext)=>{
               debug("Got result from RPC call", projectContext);

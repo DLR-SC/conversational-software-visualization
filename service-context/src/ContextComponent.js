@@ -1,14 +1,14 @@
-let debug = require("debug")("ProjectContextComponent");
+let debug = require("debug")("ContextComponent");
 let getChannelIdFromEvent = require("./utils").getChannelIdFromEvent;
 let getSchemaTypeFromEvent = require("./utils").getSchemaTypeFromEvent;
-class ProjectContextComponent {
+class ContextComponent {
 
   constructor(){
     this.contextInformation = {};
   }
 
   onJoin(session){
-    let subPromise =  session.subscribe("sofia.channel..messages.PROJECT",(msg,obj,event)=>{
+    let subPromise =  session.subscribe("sofia.channel..messages..",(msg,obj,event)=>{
       let sessionId =  getChannelIdFromEvent(event);
       let schemaType =  getSchemaTypeFromEvent(event);
       let schemaData  = msg[0];
@@ -18,7 +18,7 @@ class ProjectContextComponent {
 
     },{ match: "wildcard" });
                                     // sofia.session.1000.rpc.PROJECT.getContext
-    let rpcPromise = session.register("sofia.channel..rpc.PROJECT.getContext",(msg,obj,event)=>{
+    let rpcPromise = session.register("sofia.channel..rpc..getContext",(msg,obj,event)=>{
       let sessionId =  getChannelIdFromEvent(event);
       let schemaType =  getSchemaTypeFromEvent(event);
       this.contextInformation[sessionId]  = this.contextInformation[sessionId] ?  this.contextInformation[sessionId]: {};
@@ -30,4 +30,4 @@ class ProjectContextComponent {
     return Promise.all([subPromise,rpcPromise]);
   }
 }
-module.exports = ProjectContextComponent ;
+module.exports = ContextComponent ;
