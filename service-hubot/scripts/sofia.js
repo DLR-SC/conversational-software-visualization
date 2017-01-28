@@ -38,7 +38,7 @@ module.exports = function (robot) {
     connection.onopen = function (sess) {
         console.log("Connection is open to ", router_url, router_realm);
         session = sess;
-        session.subscribe('sofia.channel..messages.OUTGOING_MESSAGE', function (args, obj, event) {
+        session.subscribe('sofia.channel..messages.OutgoingSentence', function (args, obj, event) {
             console.log(arguments);
             var msg = args[0];
             console.log("Got outgoing msg for channel " + msg.channel + " and msg: " + msg.text);
@@ -75,7 +75,7 @@ module.exports = function (robot) {
             robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
             return
         }
-        var topic = 'sofia.channel.' + res.message.room + '.messages.INCOMING_MESSAGE';
+        var topic = 'sofia.channel.' + res.message.room + '.messages.IncomingSentence';
         console.log("Forward  message to " + topic);
         console.log(res);
         session.publish(topic, [res.message]);
