@@ -1,5 +1,5 @@
 from autobahn.asyncio.wamp import ApplicationSession
-from autobahn.wamp.types import SubscribeOptions, RegisterOptions
+from autobahn.wamp.types import SubscribeOptions, RegisterOptions, CallDetails
 import asyncio
 
 class QuestionComponent(ApplicationSession):
@@ -14,7 +14,10 @@ class QuestionComponent(ApplicationSession):
         self.last_input = ""
 
     def get_channel_from_details(self,details):
-        arr = details.topic.split(".")
+        if type(details) == CallDetails:
+            arr = details.procedure.split(".")
+        else:
+            arr = details.topic.split(".")
         indexOfMessage = arr.index("channel")
         return arr[indexOfMessage+1]
 
@@ -27,24 +30,33 @@ class QuestionComponent(ApplicationSession):
                     "className": "xyz"
                     }
 
-    async def wait_for_next_input(self):
-        while(self.pendingQuestion):
-            await asyncio.sleep(200)
-        return self.last_input
 
+    def send_text(self,text,channel_id):
+        print("Send text {0}".format(text))
+        self.publish(u'sofia.channel.{0}.messages.OutgoingSentence'.format(channel_id), {
+            "text": text,
+            "channel": channel_id})
 
-    def ask_string(self, details, sentence):
+    def ask_string(self, msg, details):
+        print("Ask for string")
         self.pendingQuestion = True
         channel_id = self.get_channel_from_details(details)
-        yield self.publish(u'sofia.channel.{0}.messages.OUTGOING_MESSAGE'.format(channel_id), {"text": sentence})
-        user_input = yield self.wait_for_next_input()
-        print(user_input)
-        return user_input
+        self.send_text(msg['question'], channel_id)
+        while (self.pendingQuestion):
+            yield from asyncio.sleep(1)
+        user_input = self.last_message
+        print("Got response... {0}".format(user_input))
+        return user_input['text']
 
 
     def onIncommingMessage(self,message, details):
+
         self.last_message = message
-        self.pendingQuestion = False
+        print(self.pendingQuestion)
+        if(self.pendingQuestion):
+            self.pendingQuestion = False
+            print("Pending question skip all other")
+            return
         print("{0}".format(message))
         channel_id = self.get_channel_from_details(details)
         message_text = message["text"].strip()
@@ -75,5 +87,5 @@ class QuestionComponent(ApplicationSession):
     async def onJoin(self, details):
 
         await self.subscribe(self.onIncommingMessage,"sofia.channel..messages.IncomingSentence",options=SubscribeOptions(match='wildcard',details_arg='details'))
-        await self.register(self.ask_string, u'sofia.channel..rpc.QuestionService.askString',options=RegisterOptions(match='wildcard', details_arg='details'))
+        await self.register(self.ask_string, u'sofia.channel..rpc.service-question.askString',options=RegisterOptions(match='wildcard', details_arg='details'))
         print("Registered methods; ready for actions. Give me some... ")
