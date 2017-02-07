@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" class="uk-height-1-1" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>OSGiApplicationView</title>
+    <link rel="stylesheet" href="./node_modules/osgi-visualization/lib/uikit/css/uikit.almost-flat.css" />
+    <link rel="stylesheet" href="./node_modules/osgi-visualization/lib/uikit/css/components/form-select.almost-flat.css" />
+    <link rel="stylesheet" href="./node_modules/osgi-visualization/lib/tipsy/stylesheets/tipsy.css">
+    <link rel="stylesheet" href="./node_modules/osgi-visualization/css/style.css">
+</head>
+<body class="uk-height-1-1">
+<div class="uk-height-1-1">
+    <div class="uk-panel">
+    <div class="uk-grid" id="header">
+        <div class="uk-width-7-10">
+                Project:
+                <span class="uk-text-bold header-value" id="label-project-name"></span>
+                Revision:
+                <span class="uk-text-bold header-value" id="label-project-revision"></span>
+                Model Timestamp:
+                <span class="uk-text-bold header-value" id="label-project-timestamp"></span>
+                <i id="download-svg-button" class="uk-icon-download"></i>
+        </div>
+        <div class="uk-width-3-10">
+            <div class="uk-button-group uk-align-right" data-uk-button-radio>
+                <button id="switch-bundles-page" class="uk-button" disabled>
+                    Bundles
+                </button>
+                <button id="switch-services-page" class="uk-button" disabled>
+                    Services
+                </button>
+                <button id="switch-history-page" class="uk-button" disabled>
+                   History
+                </button>
+                <button id="switch-classes-page" class="uk-button" disabled>
+                    Classes
+                </button>
+            </div>
+        </div>
+    </div>
+   </div>
+    <!-- Bundles Page ----------------------------------------------------------------------------->
+    <div class="uk-grid page-height page" id="bundles-page">
+        <div class="uk-width-7-10">
+            <svg id="bundles-svg" class="graphics-view" xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+            </svg>
+        </div>
+        <div class="uk-width-3-10">
+            <!-- UI Panel -->
+            <div class="uk-panel uk-panel-box uk-panel-box-secondary uk-panel-header">
+                <!-- Bundles Section -->
+                <h2 class="uk-panel-title"><i class="uk-icon-circle"></i> Bundles</h2>
+                <div class="uk-margin-bottom">
+                    <div id="bundle-search" class="uk-form-icon">
+                        <i class="uk-icon-filter"></i>
+                        <input id="bundle-search-input" type="search" placeholder="filter...">
+                    </div>
+                </div>
+                <div class="uk-margin-bottom">
+                    <div class="uk-button-dropdown"
+                         data-uk-dropdown="{ mode:'click', pos:'bottom-center' }">
+                        <button class="uk-button">Metrics <i class="uk-icon-caret-down"></i></button>
+                        <div class="uk-dropdown uk-dropdown-width-3 uk-dropdown-small uk-dropdown-bottom">
+                            <div class="uk-grid uk-dropdown-grid">
+                                <div class="uk-width-1-2">
+                                    <ul class="bundle-size-metrics-list uk-nav uk-nav-dropdown">
+                                    <!-- List will be populated dynamically -->
+                                    </ul>
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <ul class="bundle-color-metrics-list uk-nav uk-nav-dropdown">
+                                        <!-- List will be populated dynamically -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-button uk-form-select" data-uk-form-select>
+                        <span>Scale: 1x</span>
+                        <i class="uk-icon-caret-down"></i>
+                        <select id="select-bundle-size-scale-factor">
+                            <option value="0.25">Scale: 0.25x</option>
+                            <option value="0.5">Scale: 0.5x</option>
+                            <option value="1" selected="selected">Scale: 1x</option>
+                            <option value="2">Scale: 2x</option>
+                            <option value="3">Scale: 3x</option>
+                            <option value="4">Scale: 4x</option>
+                            <option value="5">Scale: 5x</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="uk-margin-bottom">
+                    <label>
+                        <input type="checkbox" id="switch-expand-selected-bundles">
+                        Expand selected bundles
+                    </label>
+                </div>
+
+                <!-- Dependencies Section -->
+                <h2 class="uk-panel-title"><i class="uk-icon-exchange"></i> Dependencies</h2>
+                <div class="uk-margin-bottom">
+                    <div class="uk-button-dropdown"
+                         data-uk-dropdown="{ mode:'click', pos:'bottom-center' }">
+                        <button class="uk-button">Metrics <i class="uk-icon-caret-down"></i></button>
+                        <div class="uk-dropdown uk-dropdown-width-3 uk-dropdown-small uk-dropdown-bottom">
+                            <div class="uk-grid uk-dropdown-grid">
+                                <div class="uk-width-1-2">
+                                    <ul class="dependency-width-metrics-list uk-nav uk-nav-dropdown">
+                                    <!-- List will be populated dynamically -->
+                                    </ul>
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <ul class="dependency-color-metrics-list uk-nav uk-nav-dropdown">
+                                        <!-- List will be populated dynamically -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-button uk-form-select" data-uk-form-select>
+                        <span>Scale: 1x</span>
+                        <i class="uk-icon-caret-down"></i>
+                        <select id="select-dependency-width-scale-factor">
+                            <option value="0.25">Scale: 0.25x</option>
+                            <option value="0.5">Scale: 0.5x</option>
+                            <option value="1" selected="selected">Scale: 1x</option>
+                            <option value="2">Scale: 2x</option>
+                            <option value="3">Scale: 3x</option>
+                            <option value="4">Scale: 4x</option>
+                            <option value="5">Scale: 5x</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="uk-margin-bottom">
+                    Types:
+                    <br/>
+                    <label>
+                        <input type="checkbox" id="switch-show-import-dep" checked>
+                         Imported Packages
+                    </label>
+                    <br/>
+                    <label>
+                        <input type="checkbox" id="switch-show-required-dep" checked>
+                         Required Bundles
+                    </label>
+                </div>
+                <div class="uk-margin-bottom">
+                    Show
+                    <div class="uk-button uk-form-select" data-uk-form-select>
+                        <span>on hover</span>
+                        <i class="uk-icon-caret-down"></i>
+                        <select id="select-show-links">
+                            <option value="on-hover">on hover</option>
+                            <option value="on-select">on selection</option>
+                            <option value="always">always</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Selected Bundle Section -->
+                <h2 class="uk-panel-title"><i class="uk-icon-info-circle"></i> Selected Bundle</h2>
+                <dl>
+                    <dt>Name</dt>
+                    <dd id="label-bundle-name"></dd>
+                    <dt>Symbolic Name</dt>
+                    <dd id="label-bundle-symbolicname"></dd>
+
+                </dl>
+                <dl class="uk-description-list-horizontal">
+                    <dt>Classes (top-level)</dt>
+                    <dd id="label-bundle-comp-units"></dd>
+                    <dt>Packages</dt>
+                    <dd id="label-bundle-packages"></dd>
+                    <dt>Exports</dt>
+                    <dd id="label-bundle-exports"></dd>
+                    <dt>Imports</dt>
+                    <dd id="label-bundle-imports"></dd>
+                    <dt>Required Bundles</dt>
+                    <dd id="label-bundle-required"></dd>
+                    <dt>Dependencies</dt>
+                    <dd id="label-bundle-dependencies"></dd>
+                    <dt>Dependants</dt>
+                    <dd id="label-bundle-dependants"></dd>
+                </dl>
+
+                <!-- Auto-Layout Section -->
+                <h2 class="uk-panel-title"><i class="uk-icon-gear"></i> Auto-Layout</h2>
+                <button id="resume-layout-button" class="uk-button uk-margin-bottom">
+                    <i class="uk-icon-play-circle uk-icon-small"></i>
+                </button>
+                <button id="stop-layout-button" class="uk-button uk-margin-bottom">
+                    <i class="uk-icon-pause-circle uk-icon-small"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Off-Canvas -->
+        <div id="bundle-info-off-canvas" class="uk-offcanvas">
+            <div class="uk-offcanvas-bar">
+                <div class="uk-panel">
+                    <h2 class="uk-panel-title"><i class="uk-icon-mouse-pointer"></i> Controls</h2>
+                    <div class="uk-text-small">
+                        <ul class="uk-list">
+                            <li>
+                            <span class="uk-text-warning"><i>click</i> + <i>drag</i></span>
+                            on background to <b>move view</b>
+                            </li>
+                            <li>
+                            <span class="uk-text-warning"><i>click</i> + <i>drag</i></span>
+                            on node to <b>move bundle</b>
+                            </li>
+                            <li>
+                            <span class="uk-text-warning"><i>CTRL</i> + <i>click</i></span>
+                            on node to <b>select</b> bundle
+                            </li>
+                            <li>
+                            <span class="uk-text-warning"><i>CTRL</i> + <i>click</i></span>
+                            on background to <b>deselect</b> bundles
+                            </li>
+                            <li>
+                                <span class="uk-text-warning"><i>scroll wheel</i></span>
+                                to <b>zoom</b>
+                            </li>
+                            <li>
+                                <span class="uk-text-warning"><i>double click</i></span>
+                                to <b>zoom</b>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Services Page ---------------------------------------------------------------------------->
+    <div class="uk-grid page-height page" id="services-page">
+        <div class="uk-width-7-10">
+            <svg id="services-svg" class="graphics-view" xmlns="http://www.w3.org/2000/svg" version="1.1">
+            </svg>
+        </div>
+        <div class="uk-width-3-10">
+            <div class="uk-panel uk-panel-box uk-panel-box-secondary uk-panel-header">
+                <!-- Auto-Layout Section -->
+                <h2 class="uk-panel-title"><i class="uk-icon-gear"></i> Auto-Layout</h2>
+                <div class="uk-margin-bottom">
+                    <button id="resume-service-layout-button" class="uk-button">
+                        <i class="uk-icon-play-circle uk-icon-small"></i>
+                    </button>
+                    <button id="stop-service-layout-button" class="uk-button">
+                        <i class="uk-icon-pause-circle uk-icon-small"></i>
+                    </button>
+                    &nbsp;&nbsp;
+                    <i id="service-layout-help" class="uk-icon-question-circle uk-icon-small"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- History Page ----------------------------------------------------------------------------->
+    <div class="uk-grid page-height page" id="history-page">
+        <div class="uk-width-7-10">
+            <svg id="history-svg" class="graphics-view" xmlns="http://www.w3.org/2000/svg" version="1.1">
+                <h2 class="uk-panel-title"><i class="uk-icon-info-circle"></i> Class</h2>
+            </svg>
+        </div>
+        <div class="uk-width-3-10">
+            <div class="uk-panel uk-panel-box uk-panel-box-secondary uk-panel-header">
+            </div>
+        </div>
+    </div>
+    <!-- Classes Page ------------------------------------------------------------------------------->
+    <div class="uk-grid page-height page" id="classes-page">
+        <div class="uk-width-7-10">
+            <svg id="classes-svg" class="graphics-view" xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+            </svg>
+        </div>
+        <div class="uk-width-3-10">
+            <div class="uk-panel uk-panel-box uk-panel-box-secondary uk-panel-header">
+                <h2 class="uk-panel-title"><i class="uk-icon-info-circle"></i> Class</h2>
+                <dl>
+                    <dt>Name</dt>
+                    <dd id="label-cl-class-name"></dd>
+                    <dt>Package</dt>
+                    <dd id="label-cl-package-name"></dd>
+                    <dt>Bundle</dt>
+                    <dd id="label-cl-bundle-name"></dd>
+                </dl>
+                <dl class="uk-description-list-horizontal">
+                    <dt>Dependencies</dt>
+                    <dd id="label-cl-class-dependencies"></dd>
+                    <dt>Dependants</dt>
+                    <dd id="label-cl-class-dependants"></dd>
+                </dl>
+                <h2 class="uk-panel-title"><i class="uk-icon-gear"></i> Configuration</h2>
+                <div class="uk-button-group uk-margin-bottom" data-uk-button-radio>
+                    <button id="cluster-show-class-dependencies" class="uk-button uk-active">
+                        Dependencies
+                    </button>
+                    <button id="cluster-show-package-hierarchies" class="uk-button">
+                        Packages
+                    </button>
+                </div>
+                <br/>
+                <label id="dependency-link-control">
+                    <b>Dependencies:</b><br/>
+                    <input type="checkbox" id="show-links-across-bundles">
+                    across bundles
+                    <br/>
+                    <input type="checkbox" id="show-links-across-packages">
+                    across packages
+                    <br/>
+                    <input type="checkbox" id="show-links-inside-packages">
+                    inside packages
+                    <br/>
+                </label><br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script> //TODO global functions
+/**
+ * Throw an AssertionError if the specified condition does not hold.
+ * @param condition
+ * @param message
+ */
+function assert(condition, message) {
+    if(!condition) {
+        if(typeof message === "undefined") {
+            message = "Assertion failed.";
+        } else {
+            message = "Assertion failed: " + message;
+        }
+        throw new AssertionError(message);
+    }
+}
+
+function AssertionError(message) {
+    this.message = message;
+}
+AssertionError.prototype = Object.create(Error.prototype);
+</script>
+<!-- TODO how to load uikit with require.js? -->
+<script src="./node_modules/osgi-visualization/lib/jquery/jquery.js"></script>
+<script src="./node_modules/osgi-visualization/lib/tipsy/javascripts/jquery.tipsy.js"></script>
+<script src="./node_modules/osgi-visualization/lib/uikit/js/uikit.js"></script>
+<script src="./node_modules/osgi-visualization/lib/uikit/js/components/form-select.js"></script>
+<script src="./node_modules/osgi-visualization/lib/uikit/js/core/offcanvas.js"></script>
+
+<!--- @Todo Replace bad loading of autobahn, but the module loader has some problems during the load process... :( --->
+<script src="http://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz"></script>
+<script src="node_modules/system/boot.js" data-import="./src/bootstrap.js"></script>
+
+</body>
+</html>
