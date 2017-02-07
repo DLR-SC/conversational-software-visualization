@@ -2,19 +2,15 @@
   "name": "sofia-service-osgi-visualization-ui",
   "version": "0.0.1",
   "dependencies": {
-    "autobahn": "^0.11.2",
-    "systemjs": "git+https://github.com/B-Stefan/system"
+    "systemjs": "git+https://github.com/B-Stefan/system",
+    "osgi-visualization": "git+https://github.com/B-Stefan/placeholder"
   },
-  "main": "./src/app",
   "scripts": {
     "test": "npm install  && ./node_modules/.bin/mocha ./test",
+    "install-osgi-visualization": "npm install git+https://gogs.dlr-gogs.default.conts.de/stefan/OSGiVisualization.git",
     "install-osgi-visualization-secure": "npm install \"git+http://$gitUserName:$gitUserPass@gogs.dlr-gogs.default.conts.de/stefan/OSGiVisualization.git\"",
-    "start": "npm run install-osgi-visualization-secure && npm install --production && node server.js"
+    "start": "npm install --production && npm run install-osgi-visualization-secure && node server.js"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0",
-    "wamp.io": "0.0.4",
-    "websocket.io": "^0.2.1"
   }
 }
