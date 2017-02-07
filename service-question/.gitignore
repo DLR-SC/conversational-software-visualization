@@ -4,3 +4,4 @@
 /sofia_question_service.egg-info/
 /dist/
 /build/
+__pycache__/
