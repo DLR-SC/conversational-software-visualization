@@ -1,5 +1,6 @@
 from autobahn.asyncio.wamp import ApplicationSession
 from autobahn.wamp.types import SubscribeOptions, RegisterOptions, CallDetails
+from question_service.question_transformer import recognize_events_from_str
 import asyncio
 
 class QuestionComponent(ApplicationSession):
@@ -57,32 +58,16 @@ class QuestionComponent(ApplicationSession):
             self.pendingQuestion = False
             print("Pending question skip all other")
             return
+
+
         print("{0}".format(message))
         channel_id = self.get_channel_from_details(details)
         message_text = message["text"].strip()
 
-        project_setup = [
-            "project setup"
-            "setup"
-            "setup project"
-            "setup git"
-            "setup repository"
-            "repository setup"
-            "git setup"
-            "channel setup"
-            "setup channel"
-        ]
-        if any(message_text in s for s in project_setup):
-            #self.publish("sofia.channel.{0}.messages.RequestProjectConfig".format(channel_id), {"msh": "test"})
-            self.publish(u'sofia.channel.{0}.messages.RequestProjectConfig'.format(channel_id), {
-                "text": u'asdasd force will be with you always',
-                "channel": channel_id})
-            print("project setup send")
+        events = recognize_events_from_str(message_text, channel_id)
 
-        else:
-            self.publish(u'sofia.channel.{0}.messages.OutgoingSentence'.format(channel_id), {
-                "text": u'The force will be with you always',
-                "channel": channel_id})
+        for event in events:
+            self.publish(event['channel'],event['data'])
 
     async def onJoin(self, details):
 
