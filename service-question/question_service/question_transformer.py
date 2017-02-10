@@ -1,6 +1,7 @@
 
 
 import re
+from functools import reduce
 
 
 def recognize_project_request(message_text,channel_id):
@@ -55,11 +56,17 @@ def recognize_events_from_str(message_text, channel_id):
     events = list()
 
     events.append(recognize_project_request(message_text,channel_id))
+    events.append(recognize_namepsace(message_text,channel_id))
+    events.append(recognize_class_name(message_text,channel_id))
 
-    flat_events = filter(lambda x: isinstance(x,list), events)
-    flat_events = sum(flat_events,[])
+    results = list()
+    for event in events:
+        if isinstance(event, list):
+            for e in event:
+                if isinstance(e,object):
+                    results.append(e)
+        elif event is not None:
+            print(event)
+            results.append(event)
 
-    flat_events = flat_events + list(filter(lambda x: isinstance(x,object), events))
-
-
-    return list(filter(lambda x:x is not None,flat_events))
+    return results
