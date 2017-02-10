@@ -66,8 +66,8 @@ class QuestionComponent(ApplicationSession):
 
         events = recognize_events_from_str(message_text, channel_id)
 
-        print(events)
         for event in events:
+            print(event)
             self.publish(event['channel'],event['data'])
 
     async def onJoin(self, details):

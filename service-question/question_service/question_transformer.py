@@ -44,7 +44,7 @@ def recognize_class_name(message_text, channel_id):
     splits = map(lambda part: re.search("[A-Z]([A-Z0-9]*[a-z][a-z0-9]*[A-Z]|[a-z0-9]*[A-Z][A-Z0-9]*[a-z])[A-Za-z0-9]*", part),splits)
     splits = filter(lambda x: x is not None, splits)
     classNames = map(lambda x: x.group(), splits)
-    events = map(lambda x:  {'channel': u'sofia.channel.{0}.messages.Namespace'.format(channel_id),
+    events = map(lambda x:  {'channel': u'sofia.channel.{0}.messages.ClassName'.format(channel_id),
                                'data': {"className": x}
                               }, classNames)
 
