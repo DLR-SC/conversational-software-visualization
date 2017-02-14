@@ -8,8 +8,7 @@ RUN mkdir /app/packages/rocketchat-chatops
 COPY ./rocketchat-chatops /app/packages/rocketchat-chatops
 ENV METEOR_ALLOW_SUPERUSER true
 ENV environment production
-RUN npm -g install npm
-RUN cd /app && npm install --production && \
-    bash $METEORD_DIR/lib/install_meteor.sh && \
+RUN bash $METEORD_DIR/lib/install_meteor.sh && \
+    cd /app && meteor npm install --production && \
     cd /app && meteor add sofia:osgi-view --allow-incompatible-update && \
     bash $METEORD_DIR/lib/build_app.sh
