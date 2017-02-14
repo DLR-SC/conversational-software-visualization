@@ -10,12 +10,11 @@ COPY ./rocketchat-chatops /opt/src/packages/rocketchat-chatops
 RUN ls /opt/src/packages/rocketchat-chatops -l
 RUN cat /opt/src/packages/rocketchat-chatops/package.js
 RUN export METEOR_ALLOW_SUPERUSER=true
-USER nobody
 WORKDIR /opt/src
 RUN ls -l
-RUN meteor help
-RUN meteor add sofia:osgi-view
-RUN meteor build .. --directory \
+RUN meteor help --allow-superuser
+RUN meteor add sofia:osgi-view --allow-superuser
+RUN meteor build .. --directory --allow-superuser \
     && cd ../bundle/programs/server \
     && npm install \
     && rm -rf /opt/src
