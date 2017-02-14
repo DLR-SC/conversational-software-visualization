@@ -1,5 +1,5 @@
 Package.describe({
-	name: 'rocketchat:chatops',
+	name: 'sofia:osgi-view',
 	version: '0.0.1',
 	summary: 'Chatops Panel',
 	git: ''
