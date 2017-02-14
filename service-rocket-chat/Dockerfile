@@ -20,7 +20,7 @@ RUN apt-get update -q -q && \
  curl https://install.meteor.com/ | sed s/--progress-bar/-sL/g | sh && \
  apt-get --yes --force-yes purge curl && \
  apt-get --yes --force-yes autoremove && \
- apt-get --yes --force-yes git-all && \
+ apt-get  git-all && \
  adduser --system --group meteor --home / && \
  export "NODE=$(find /.meteor/ -path '*bin/node' | grep '/.meteor/packages/meteor-tool/' | sort | head -n 1)" && \
  ln -sf ${NODE} /usr/local/bin/node && \
