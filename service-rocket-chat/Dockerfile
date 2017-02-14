@@ -8,4 +8,5 @@ RUN mkdir /app/packages/rocketchat-chatops
 COPY ./rocketchat-chatops /app/packages/rocketchat-chatops
 ENV METEOR_ALLOW_SUPERUSER true
 ENV environment production
+RUN cd /app && npm install --production
 RUN bash $METEORD_DIR/on_build.sh
