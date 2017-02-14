@@ -1,4 +1,4 @@
-FROM meteorhacks/meteord:base
+FROM kadirahq/meteord:base
 
 MAINTAINER Daniel Dent (https://www.danieldent.com/)
 
