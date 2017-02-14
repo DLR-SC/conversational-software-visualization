@@ -1,23 +1,11 @@
-FROM danieldent/meteor:1.0.3.2
+FROM meteorhacks/meteord:base
+
 MAINTAINER Daniel Dent (https://www.danieldent.com/)
-RUN git clone https://github.com/RocketChat/Rocket.Chat.git /opt/src
-RUN ls /opt/src -l
-RUN rm -rf /opt/src/packages/rocketchat-chatops
-RUN mkdir /opt/src/packages/rocketchat-chatops
-COPY ./rocketchat-chatops /opt/src/packages/rocketchat-chatops
 
-
-RUN ls /opt/src/packages/rocketchat-chatops -l
-RUN cat /opt/src/packages/rocketchat-chatops/package.js
-RUN export METEOR_ALLOW_SUPERUSER=true
-WORKDIR /opt/src
-RUN ls -l
-RUN meteor help --allow-superuser
-RUN meteor add sofia:osgi-view --allow-superuser
-RUN meteor build .. --directory --allow-superuser \
-    && cd ../bundle/programs/server \
-    && npm install \
-    && rm -rf /opt/src
-WORKDIR /opt/bundle
-ENV PORT 3000
-#CMD ["/usr/local/bin/node", "main.js"]
+RUN git clone https://github.com/RocketChat/Rocket.Chat.git /app
+RUN rm -rf /app/packages/rocketchat-chatops
+RUN mkdir /app/packages/rocketchat-chatops
+COPY ./rocketchat-chatops /app/packages/rocketchat-chatops
+ENV METEOR_ALLOW_SUPERUSER true
+ENV environment production
+RUN bash $METEORD_DIR/on_build.sh
