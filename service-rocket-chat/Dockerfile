@@ -18,8 +18,8 @@ RUN apt-get update -q -q && \
  apt-get --yes --force-yes install curl python build-essential && \
  export METEOR_ALLOW_SUPERUSER=true && \
  curl https://install.meteor.com/ | sed s/--progress-bar/-sL/g | sh && \
- apt-get install --yes --force-yes purge curl && \
- apt-get install --yes --force-yes autoremove && \
+ apt-get --yes --force-yes purge curl && \
+ apt-get --yes --force-yes autoremove && \
  apt-get install --yes --force-yes git-all && \
  adduser --system --group meteor --home / && \
  export "NODE=$(find /.meteor/ -path '*bin/node' | grep '/.meteor/packages/meteor-tool/' | sort | head -n 1)" && \
