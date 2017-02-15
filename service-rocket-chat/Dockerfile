@@ -42,6 +42,7 @@ RUN export METEOR_ALLOW_SUPERUSER=true && \
  rm -rf /build
 
 WORKDIR /bundle
+RUN cd programs/server && meteor npm install
 CMD ["node", "main.js"]
 
 #FROM kadirahq/meteord:base
