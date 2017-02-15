@@ -12,8 +12,6 @@ ENV HOME /
 
 VOLUME /var/log/meteor
 
-COPY ./etc /etc
-
 RUN apt-get update -q -q && \
  apt-get --yes --force-yes install curl python build-essential && \
  export METEOR_ALLOW_SUPERUSER=true && \
@@ -23,8 +21,7 @@ RUN apt-get update -q -q && \
  apt-get install --yes --force-yes git-all && \
  adduser --system --group meteor --home / && \
  export "NODE=$(find /.meteor/ -path '*bin/node' | grep '/.meteor/packages/meteor-tool/' | sort | head -n 1)" && \
- ln -sf ${NODE} /usr/local/bin/node && \
- echo "export NODE_PATH=\"$(dirname $(dirname "$NODE"))/lib/node_modules\"" >> /etc/service/meteor/run.env
+ ln -sf ${NODE} /usr/local/bin/node
 
 RUN git clone https://github.com/RocketChat/Rocket.Chat.git /source
 RUN rm -rf /source/packages/rocketchat-chatops
