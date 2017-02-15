@@ -38,6 +38,7 @@ RUN export METEOR_ALLOW_SUPERUSER=true && \
  cd /build && \
  meteor list && \
  if [ -f package.json ]; then meteor npm install --production; fi && \
+ meteor add sofia:osgi-view
  meteor build --headless . && \
  cd / && \
  tar xf /build/build.tar.gz && \
