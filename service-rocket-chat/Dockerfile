@@ -44,7 +44,8 @@ RUN export METEOR_ALLOW_SUPERUSER=true && \
  tar xf /build/build.tar.gz && \
  rm -rf /build
 
-
+WORKDIR /bundle
+CMD ["node", "main.js"]
 
 #FROM kadirahq/meteord:base
 
