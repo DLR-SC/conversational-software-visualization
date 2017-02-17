@@ -50,6 +50,18 @@ class QuestionTransformer (TestCase):
         self.assertEqual(first["data"]["namespace"],"test.test")
 
 
+        result = recognize_namepsace("Show me all about the namespace gui", 1000)
+
+        self.assertIsNotNone(result)
+        self.assertIsInstance(result,list)
+        self.assertEqual(len(result),1)
+        first = result.pop()
+        self.assertIsNotNone(first['channel'])
+        self.assertIsNotNone(first['data'])
+        self.assertIsInstance(first["data"]["namespace"],str)
+        self.assertEqual(first["data"]["namespace"],"gui")
+
+
 
     def test_recognize_class_name(self):
         result = recognize_class_name("I have a problem with LoginImplementation", 1000)

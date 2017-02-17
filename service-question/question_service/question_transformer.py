@@ -27,15 +27,32 @@ def recognize_project_request(message_text,channel_id):
 
 def recognize_namepsace(message_text, channel_id):
     splits = message_text.split(" ")
-    splits = map(lambda part: re.search("^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)+)$", part),splits)
-    splits = filter(lambda x: x is not None, splits)
 
-    namespaces  = map(lambda x: x.group(), splits)
+    #check for namespace pattern
+    namespaces = map(lambda part: re.search("^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)+)$", part),splits)
+    namespaces = filter(lambda x: x is not None, namespaces)
+
+    namespaces  = map(lambda x: x.group(), namespaces)
     namespaces_events  = map(lambda x:
                               {'channel': u'sofia.channel.{0}.messages.Namespace'.format(channel_id),
                                'data': {"namespace": x}
                               }
                              , namespaces)
+
+    namespaces_events = list(namespaces_events)
+    #check for questions like "show me namespace gui"
+
+    splits = list(splits)
+    for split in splits:
+        if(split =="namespace"):
+            index = splits.index(split)
+            if len(splits) >= index+1:
+                nextWord = splits[index+1]
+                if len([c for c in nextWord if not c.islower()]) == 0 and len(nextWord.split(".")) == 1:
+                    namespaces_events.append(
+                               {'channel': u'sofia.channel.{0}.messages.Namespace'.format(channel_id),
+                               'data': {"namespace": nextWord}
+                              })
 
     return list(namespaces_events)
 
