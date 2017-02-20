@@ -24,6 +24,7 @@ RUN apt-get update -q -q && \
  ln -sf ${NODE} /usr/local/bin/node
 
 RUN git clone https://github.com/RocketChat/Rocket.Chat.git /source
+RUN cd /soruce && git checkout tags/0.52.0
 RUN rm -rf /source/packages/rocketchat-chatops
 RUN mkdir /source/packages/rocketchat-chatops
 COPY ./rocketchat-chatops /source/packages/rocketchat-chatops
