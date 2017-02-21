@@ -1,7 +1,7 @@
 Package.describe({
 	name: 'sofia:osgi-view',
 	version: '0.0.1',
-	summary: 'Chatops Panel',
+	summary: 'Sofia OSGI Panel',
 	git: ''
 });
 
@@ -9,8 +9,7 @@ Package.onUse(function(api) {
 	api.use([
 		'coffeescript',
 		'ecmascript',
-		'rocketchat:lib',
-		'dburles:google-maps@1.1.5'
+		'rocketchat:lib'
 	]);
 
 	api.use('templating', 'client');
@@ -18,13 +17,10 @@ Package.onUse(function(api) {
 	api.addFiles([
 		'client/startup.coffee',
 		'client/tabBar.coffee',
-		'client/views/chatops.html',
-		'client/views/chatops.coffee',
-		'client/views/codemirror.html',
-		'client/views/codemirror.coffee',
-		'client/views/droneflight.html',
-		'client/views/droneflight.coffee',
-		'client/views/dynamicUI.html',
+		'client/views/sofia.html',
+		'client/views/sofia.coffee',
+		'client/views/bundles.html',
+		'client/views/bundles.coffee',
 		'client/views/stylesheets/chatops.css'
 	], 'client');
 

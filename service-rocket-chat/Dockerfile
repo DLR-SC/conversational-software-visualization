@@ -24,9 +24,9 @@ RUN apt-get update -q -q && \
  ln -sf ${NODE} /usr/local/bin/node
 
 RUN git clone https://github.com/RocketChat/Rocket.Chat.git /source && cd /source && git checkout tags/0.52.0
-RUN rm -rf /source/packages/rocketchat-chatops
-RUN mkdir /source/packages/rocketchat-chatops
-COPY ./rocketchat-chatops /source/packages/rocketchat-chatops
+RUN rm -rf /source/packages/rocketchat-sofia
+RUN mkdir /source/packages/rocketchat-sofia
+COPY ./rocketchat-sofia /source/packages/rocketchat-sofia
 
 RUN export METEOR_ALLOW_SUPERUSER=true && \
  if [ -x /source/docker-source.sh ]; then /source/docker-source.sh; fi && \
@@ -50,9 +50,9 @@ CMD node main.js
 #MAINTAINER Daniel Dent (https://www.danieldent.com/)
 
 
-#RUN rm -rf /app/packages/rocketchat-chatops
-#RUN mkdir /app/packages/rocketchat-chatops
-#COPY ./rocketchat-chatops /app/packages/rocketchat-chatops
+#RUN rm -rf /app/packages/rocketchat-sofia
+#RUN mkdir /app/packages/rocketchat-sofia
+#COPY ./rocketchat-sofia /app/packages/rocketchat-sofia
 #ENV METEOR_ALLOW_SUPERUSER true
 #ENV environment production
 #RUN npm cache clear && \
