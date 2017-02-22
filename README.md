@@ -15,11 +15,14 @@ $ docker-compose .
 
 ```
 
-## Architecture
+## Services 
 
-The project consists of 4 services 
+The project consists of multiple services.  
 
-* [Question Service](./service-question/)
-* [Context Service](./service-context/)
-* [OSGi Data Service](./service-osgi-data)
-* [OSGi Visualization Service](./service-osgi-visualization)
+|  Service | Build-Status  | License |  
+|---|---|---|
+|  [Question service](./service-question) | [![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=B-Stefan&repoName=Sofia&branch=master&pipelineName=service-question&accountName=B-Stefan&type=cf-1)]( https://g.codefresh.io/repositories/B-Stefan/Sofia/builds?filter=trigger:build;branch:master;service:587db587c07e7d01005a9911~service-question)  |   ![](https://img.shields.io/badge/license-Apache%202.0-blue.svg)|
+|  [Hubot service ](./service-hubot) |  [![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=B-Stefan&repoName=Sofia&branch=master&pipelineName=service-hubot&accountName=B-Stefan&type=cf-1)]( https://g.codefresh.io/repositories/B-Stefan/Sofia/builds?filter=trigger:build;branch:master;service:587e5febc07e7d01005bf971~service-hubot) | ![](https://img.shields.io/badge/license-Apache%202.0-blue.svg)  |   
+|  [RocketChat service ](./service-rocket-chat) |  [![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=B-Stefan&repoName=Sofia&branch=master&pipelineName=service-rocket-chat&accountName=B-Stefan&type=cf-1)]( https://g.codefresh.io/repositories/B-Stefan/Sofia/builds?filter=trigger:build;branch:master;service:58a35235c337c70100419ddb~service-rocket-chat) |  ![](https://img.shields.io/badge/license-Apache%202.0-blue.svg) |   
+|  [OSGi visualization UI service ](./service-osgi-visualization-ui) |  [![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=B-Stefan&repoName=Sofia&branch=master&pipelineName=service-osgi-visualization-ui&accountName=B-Stefan&type=cf-1)]( https://g.codefresh.io/repositories/B-Stefan/Sofia/builds?filter=trigger:build;branch:master;service:5879f74d1148080100b67d71~service-osgi-visualization-ui) |  ![](https://img.shields.io/badge/license-Apache%202.0-blue.svg) |   
+   
