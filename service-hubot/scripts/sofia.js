@@ -78,7 +78,17 @@ module.exports = function (robot) {
     var topic = 'sofia.channel.' + res.message.room + '.messages.IncomingSentence';
     console.log("Forward  message to " + topic);
     console.log(res);
-    session.publish(topic, [res.message]);
+
+    var mention = false;
+    if (res.message.toLowerCase().indexOf("@sofia") == 0){
+      mention = true;
+    }
+    session.publish(topic, [{
+      text: res.message,
+      userName: res.user.name,
+      mention: mention
+    }]);
+
     console.log("Published.... ");
 
   })
