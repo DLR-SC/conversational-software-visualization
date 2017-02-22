@@ -50,7 +50,7 @@ module.exports = function (robot) {
           .then(function () {
             console.log("Message sent")
           }).catch(function (err) {
-        console.error(err)
+            console.log(err)
       });
 
     }, {match: "wildcard"});
