@@ -5,6 +5,12 @@ from functools import reduce
 
 
 def recognize_project_request(message_text,channel_id):
+    """
+    Try to find a project configuration event in a string
+    :param message_text:
+    :param channel_id:
+    :return:
+    """
     project_setup = [
         "project setup"
         "setup"
@@ -26,6 +32,12 @@ def recognize_project_request(message_text,channel_id):
 
 
 def recognize_namepsace(message_text, channel_id):
+    """
+    Try to find namespaces in the message
+    :param message_text:
+    :param channel_id:
+    :return:
+    """
     splits = message_text.split(" ")
 
     #check for namespace pattern
@@ -57,6 +69,12 @@ def recognize_namepsace(message_text, channel_id):
     return list(namespaces_events)
 
 def recognize_class_name(message_text, channel_id):
+    """
+    Try to find class names (camelcase based)  in  a string
+    :param message_text:
+    :param channel_id:
+    :return:
+    """
     splits = message_text.split(" ")
     splits = map(lambda part: re.search("[A-Z]([A-Z0-9]*[a-z][a-z0-9]*[A-Z]|[a-z0-9]*[A-Z][A-Z0-9]*[a-z])[A-Za-z0-9]*", part),splits)
     splits = filter(lambda x: x is not None, splits)
@@ -69,6 +87,12 @@ def recognize_class_name(message_text, channel_id):
 
 
 def recognize_events_from_str(message_text, channel_id):
+    """
+    Try to recognize as many as possible events from a string
+    :param message_text:
+    :param channel_id:
+    :return: List oft events
+    """
 
     events = list()
 
@@ -76,6 +100,7 @@ def recognize_events_from_str(message_text, channel_id):
     events.append(recognize_namepsace(message_text,channel_id))
     events.append(recognize_class_name(message_text,channel_id))
 
+    # flattern event list (transfrom list [[{},{}],[{}],{}] into [{},{},{}]
     results = list()
     for event in events:
         if isinstance(event, list):
@@ -86,4 +111,5 @@ def recognize_events_from_str(message_text, channel_id):
             print(event)
             results.append(event)
 
+    #Return list of events
     return results
