@@ -1,0 +1,21 @@
+{
+  "name": "sofia-service-hubot",
+  "version": "1.0.0",
+  "description": "A Hubot to interact with software visualizations",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha ./tests/sofia.test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "autobahn": "^0.11.2",
+    "hubot": "^2.19.0"
+  }
+}
