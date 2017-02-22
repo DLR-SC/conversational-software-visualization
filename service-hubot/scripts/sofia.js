@@ -70,6 +70,7 @@ module.exports = function (robot) {
    */
 
   robot.hear(/.*/, function (res) {
+    console.log("Got message from brain");
     if (session == undefined) {
       robot.send("Oh we got a problem here.... ");
       robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
