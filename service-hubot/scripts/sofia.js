@@ -26,7 +26,7 @@ var env = process.env.env ? process.env.env.toUpperCase() : "production";
 
 module.exports = function (robot) {
 
-  var session = undefined;
+  var session;
 
   var connection = new autobahn.Connection({
         url: router_url,
@@ -71,9 +71,11 @@ module.exports = function (robot) {
 
   robot.hear(/.*/, function (res) {
     console.log("Got message from brain");
-    if (session == undefined) {
+    if (typeof session === "undefined") {
+      console.log("Send msg that we got an connection problen");
       robot.send("Oh we got a problem here.... ");
       robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
+      connection.open();
       return
     }
     var topic = 'sofia.channel.' + res.message.room + '.messages.IncomingSentence';
