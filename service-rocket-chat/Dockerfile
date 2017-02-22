@@ -23,7 +23,7 @@ RUN apt-get update -q -q && \
  export "NODE=$(find /.meteor/ -path '*bin/node' | grep '/.meteor/packages/meteor-tool/' | sort | head -n 1)" && \
  ln -sf ${NODE} /usr/local/bin/node
 
-RUN git clone https://github.com/RocketChat/Rocket.Chat.git /source && cd /source && git checkout tags/0.52.0
+RUN git clone https://github.com/RocketChat/Rocket.Chat.git /source && cd /source && git checkout tags/0.50.1
 RUN rm -rf /source/packages/rocketchat-sofia
 RUN mkdir /source/packages/rocketchat-sofia
 COPY ./rocketchat-sofia /source/packages/rocketchat-sofia
