@@ -1,5 +1,5 @@
 from autobahn.asyncio.wamp import ApplicationSession
-from autobahn.wamp.types import SubscribeOptions, RegisterOptions, CallDetails, PublishOptions
+from autobahn.wamp.types import SubscribeOptions, RegisterOptions, PublishOptions
 from question_service.utils import get_channel_from_details
 from question_service.question_transformer import recognize_events_from_str
 import asyncio
@@ -56,7 +56,7 @@ class QuestionComponent(ApplicationSession):
         return user_input['text']
 
 
-    def on_incoming_sentence(self, message, details):
+    def on_incoming_sentence(self, incomming_sentence,  details):
         """
         Hook for the incoming sentence
         :param message:
@@ -64,7 +64,7 @@ class QuestionComponent(ApplicationSession):
         :return:
         """
 
-        self.last_message = message
+        self.last_message = incomming_sentence["text"]
 
         if(self.pendingQuestion):
             self.pendingQuestion = False
@@ -72,11 +72,11 @@ class QuestionComponent(ApplicationSession):
             return
 
 
-        print("Got message: {0}".format(message))
+        print("Got message: {0}".format(incomming_sentence))
 
         channel_id = get_channel_from_details(details)
 
-        message_text = message["text"].strip()
+        message_text = incomming_sentence["text"].strip()
 
         events = recognize_events_from_str(message_text, channel_id)
 

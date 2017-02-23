@@ -1,4 +1,7 @@
-def get_channel_from_details(self, details):
+
+from autobahn.wamp.types import CallDetails
+
+def get_channel_from_details(details):
     if type(details) == CallDetails:
         arr = details.procedure.split(".")
     else:
