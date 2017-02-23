@@ -19,6 +19,7 @@ RUN mkdir /source/packages/rocketchat-sofia
 COPY ./rocketchat-sofia /source/packages/rocketchat-sofia
 WORKDIR /source
 
+RUN export METEOR_ALLOW_SUPERUSER=true
 RUN meteor npm install --production
 RUN meteor add sofia:osgi-view
 RUN meteor build --headless
