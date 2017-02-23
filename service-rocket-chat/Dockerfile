@@ -13,6 +13,15 @@ ENV HOME /
 RUN  apt-get --yes --force-yes install curl python
 RUN  curl https://install.meteor.com/ | sed s/--progress-bar/-sL/g | sh
 
+#Clone Rocket.Chat
+RUN git clone https://github.com/RocketChat/Rocket.Chat.git /source && cd /source && git checkout tags/0.50.1
+RUN mkdir /source/packages/rocketchat-sofia
+COPY ./rocketchat-sofia /source/packages/rocketchat-sofia
+WORKDIR /source
+
+RUN meteor npm install --production
+RUN meteor add sofia:osgi-view
+RUN meteor build --headless
 
 
 #FROM tozd/runit
