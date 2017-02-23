@@ -10,7 +10,7 @@ ENV MONGO_URL mongodb://mongodb/meteor
 #ENV MONGO_OPLOG_URL mongodb://mongodb/local
 ENV HOME /
 
-RUN  apt-get --yes --force-yes install curl python build-essential
+RUN  apt-get --yes --force-yes install curl python
 RUN  curl https://install.meteor.com/ | sed s/--progress-bar/-sL/g | sh
 
 
