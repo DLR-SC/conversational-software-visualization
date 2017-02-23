@@ -15,6 +15,7 @@
     "mocha": "^3.2.0"
   },
   "dependencies": {
+    "autobahn": "^0.11.2",
     "coffee-script": "^1.12.4",
     "hubot": "^2.19.0",
     "hubot-rocketchat": "^1.0.7"
