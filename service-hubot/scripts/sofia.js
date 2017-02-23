@@ -16,53 +16,92 @@
 // Author:
 //   B-Stefan
 
-var autobahn = require("autobahn");
+const autobahn = require("autobahn");
 
-var router_url = process.env.WAMP_ROUTER_URL ? process.env.WAMP_ROUTER_URL : "ws://wamp_router:8080/ws";
+const debug = require("debug")("sofia");
 
-var router_realm = process.env.WAMP_RELAM ? process.env.WAMP_RELAM : "realm1";
+const router_url = process.env.WAMP_ROUTER_URL ? process.env.WAMP_ROUTER_URL : "ws://wamp_router:8080/ws";
 
-var env = process.env.env ? process.env.env.toUpperCase() : "production";
+const router_realm = process.env.WAMP_RELAM ? process.env.WAMP_RELAM : "realm1";
 
+const env = process.env.env ? process.env.env.toUpperCase() : "production";
+
+/**
+ * Method to connect to the wamp router
+ * @param url - the router url
+ * @param relam - the relam
+ * @param sessionFn - callback function for a successful join
+ * @returns {Promise}
+ */
+const connectToServer = function(url,relam,sessionFn){
+
+  return new Promise((resolve,reject)=>{
+    debug("Try to connect to ", url, relam);
+    let connection = new autobahn.Connection({
+      url: url,
+      realm: relam}
+    );
+    connection.onopen = function (session) {
+      debug("Connection is open to ", url, relam);
+      resolve(connection);
+      sessionFn(session)
+    };
+    connection.onclose = function (reason, details) {
+      if (reason == "unreachable" || reason == "unsupported"){
+        debug("Connection not established", reason, details);
+        reject(reason);
+      }else {
+        debug("Connection error", reason, details);
+      }
+    };
+    connection.open()
+
+  })
+};
+
+/**
+ * Hubot script
+ * @param robot
+ */
 module.exports = function (robot) {
 
-  var session;
+  let session;
 
-  var connection = new autobahn.Connection({
+  let connection = new autobahn.Connection({
         url: router_url,
         realm: router_realm
       }
   );
-  /**
-   * Try to connect to WAMP Router
-   */
-  console.log("Try to connect to wamp router: " + router_url + " R: " + router_realm)
-  connection.onopen = function (sess) {
-    console.log("Connection is open to ", router_url, router_realm);
+
+  const onJoin = function(sess) {
     session = sess;
     session.subscribe('sofia.channel..messages.OutgoingSentence', function (args, obj, event) {
 
-      var msg = args[0];
+      let msg = args[0];
 
-      console.log("Got outgoing msg for channel " + msg.channel + " and msg: " + msg.text);
+      debug("Got outgoing msg for channel " + msg.channel + " and msg: " + msg.text);
 
       robot.adapter.chatdriver.sendMessageByRoomId(msg.text, msg.channel)
           .then(function () {
-            console.log("Message sent")
+            debug("Message sent")
           }).catch(function (err) {
-            console.log(err)
+        debug(err)
       });
 
     }, {match: "wildcard"});
   };
-  connection.onclose = function (reason, details) {
-    if (reason == "unreachable" || reason == "unsupported") {
-      console.log("Connection not established", reason, details);
-    } else {
-      console.log("Connection lost", reason, details);
-    }
-  };
-  connection.open();
+
+  /**
+   * Try to connect to WAMP Router
+   */
+  debug("Try to connect to wamp router: " + router_url + " R: " + router_realm);
+  connectToServer(router_url,router_realm,onJoin.bind(this)).then(()=>{
+    "use strict";
+    debug("connected succesful to wamp router " + router_url + " " + router_realm)
+  }).catch((err)=>{
+    "use strict";
+    debug("Failed to connect to wamp router : " + router_realm + " " + router_realm + " with error ", err)
+  });
 
 
   /**
@@ -70,29 +109,34 @@ module.exports = function (robot) {
    */
 
   robot.hear(/.*/, function (res) {
-    console.log("Got message from brain");
+    debug("Got message from brain");
     if (typeof session === "undefined") {
-      console.log("Send msg that we got an connection problen");
+      debug("Send msg that we got an connection problen");
       robot.send("Oh we got a problem here.... ");
       robot.send("I can't forward your message because we got a connection problem to the router: " + router_url + " realm:" + router_realm)
       connection.open();
       return
     }
-    var topic = 'sofia.channel.' + res.message.room + '.messages.IncomingSentence';
-    console.log("Forward  message to " + topic);
-    console.log(res);
+    let topic = 'sofia.channel.' + res.message.room + '.messages.IncomingSentence';
+    debug("Forward  message to " + topic);
+    debug(res);
 
-    var mention = false;
-    if (res.message.toLowerCase().indexOf("@sofia") == 0){
+    let mention = false;
+    let text = res.message.text;
+    if (text.toLowerCase().indexOf("@sofia") == 0){
       mention = true;
+      //Remove mention "@sofia" from text
+      text = text.split(" ").slice(1).join(" ")
     }
-    session.publish(topic, [{
-      text: res.message,
-      userName: res.user.name,
+    let payload = {
+      text: text,
+      userName: res.message.user.name,
       mention: mention
-    }]);
+    };
 
-    console.log("Published.... ");
+    session.publish(topic, [payload]);
+
+    debug("Published msg .... " + JSON.stringify(payload));
 
   })
 };

@@ -6,6 +6,7 @@ WORKDIR /hubot
 
 RUN npm install --production
 ENV env production
+ENV DEBUG sofia
 ENV ROCKETCHAT_URL rocket:3000
 ENV ROCKETCHAT_USER Sofia
 ENV HUBOT_LOG_LEVEL=debug
