@@ -13,6 +13,9 @@ ENV HOME /
 RUN  apt-get --yes --force-yes install curl python
 RUN  curl https://install.meteor.com/ | sed s/--progress-bar/-sL/g | sh
 
+#Bugfix https://github.com/npm/npm/issues/13306
+RUN cd $(npm root -g)/npm && npm install fs-extra && sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js
+
 #Clone Rocket.Chat
 RUN git clone https://github.com/RocketChat/Rocket.Chat.git /source && cd /source && git checkout tags/0.50.1
 RUN mkdir /source/packages/rocketchat-sofia
