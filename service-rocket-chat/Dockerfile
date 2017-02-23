@@ -21,8 +21,8 @@ WORKDIR /source
 
 RUN export METEOR_ALLOW_SUPERUSER=true
 RUN meteor npm install --production
-RUN meteor add sofia:osgi-view
-RUN meteor build --headless
+RUN meteor add sofia:osgi-view --allow-superuser
+RUN meteor build --headless --allow-superuser
 
 
 #FROM tozd/runit
