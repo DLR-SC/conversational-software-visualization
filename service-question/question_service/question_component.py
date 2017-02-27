@@ -92,5 +92,5 @@ class QuestionComponent(ApplicationSession):
         """
 
         await self.subscribe(self.on_incoming_sentence, "sofia.channel..messages.IncomingSentence", options=SubscribeOptions(match='wildcard', details_arg='details'))
-        await self.register(self.ask_string, u'sofia.channel..rpc.service-question.askString',options=RegisterOptions(match='wildcard', details_arg='details'))
+        await self.register(self.ask_string, u'sofia.channel..rpc.askString',options=RegisterOptions(match='wildcard', details_arg='details'))
         print("Registered methods; ready for actions. Give me some... ")
