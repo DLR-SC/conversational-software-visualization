@@ -3,6 +3,11 @@
 
 ## Getting started
 
+ You need access to the repository: http://gogs.dlr-gogs.default.conts.de/stefan/OSGiVisualization and set the following env. variables:
+
+ * gitUserName: xxxxxx
+ * gitUserPass: xxxxxx
+
 ```sh
 
 $ docker run sofia/service-osgi-visualization-ui
