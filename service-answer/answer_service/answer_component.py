@@ -1,8 +1,9 @@
 from autobahn.asyncio.wamp import ApplicationSession
 from autobahn.wamp.types import SubscribeOptions, RegisterOptions, PublishOptions
-
+from answer_service.answer_module import AnswerModule
+from answer_service.utils import get_channel_from_details
 import asyncio
-
+base_url = 'http://osgi-api.cloud.conts.de'
 class AnswerComponent(ApplicationSession):
     """
     An application component providing procedures with different kinds
@@ -10,27 +11,6 @@ class AnswerComponent(ApplicationSession):
     """
     def __init__(self, *kwargs):
         super().__init__(*kwargs)
-
-        # Used to store the information that a service requested information from the user
-        self.pendingQuestion = False
-        # The last input from the user.
-        self.last_input = ""
-
-
-    def send_text(self,text,channel_id):
-        """
-        Send a text msg to the channel
-        :param text: The text
-        :param channel_id: The channel id
-        :return: result from publish function
-        """
-
-        print("Send text {0}".format(text))
-
-        return self.publish(u'sofia.channel.{0}.messages.OutgoingSentence'.format(channel_id), {
-            "text": text,
-            "channel": channel_id})
-
 
 
     def on_more_info(self, type,  details):
@@ -41,6 +21,15 @@ class AnswerComponent(ApplicationSession):
         :return:
         """
 
+        channel_id = get_channel_from_details(details)
+
+        def ask_str(question,channel_id):
+            return self.call(u'sofia.channel.{0}.rpc.askString'.format(channel_id), question)
+
+        instance = AnswerModule(base_url,channel_id,ask_str)
+        result = instance.more_info(type)
+
+        self.publish(result['channel'], result['data'],options=PublishOptions(retain=True))
 
 
     async def onJoin(self, details):
