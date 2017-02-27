@@ -1,0 +1,71 @@
+service-rocket-chat:
+  environment:
+    MONGO_URL: mongodb://mongodb:27017/rocketchat
+    PORT: '3000'
+    ROOT_URL: http://yourhost:3000
+    MONGO_OPLOG_URL: ''
+  labels:
+    io.rancher.sidekicks: mongodb
+    io.rancher.container.pull_image: always
+  tty: true
+  command:
+  - node
+  - main.js
+  image: stefan125/sofia-service-rocket-chat:master
+  stdin_open: true
+osgi-visualization-ui:
+  environment:
+    gitUserName: xxxxxx
+    gitUserPass: xxxxxx
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: stefan125/sofia-service-osgi-visualization-ui:master
+  stdin_open: true
+question-service:
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: stefan125/sofia-service-question:master
+  links:
+  - wamp-router:wamp_router
+  stdin_open: true
+service-answer:
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: stefan125/sofia-service-answer:master
+  links:
+  - wamp-router:wamp_router
+  stdin_open: true
+mongodb:
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  command:
+  - mongod
+  - --smallfiles
+  - --oplogSize
+  - '128'
+  image: mongo:3.4
+  stdin_open: true
+hubot-service:
+  environment:
+    ROCKETCHAT_PASSWORD: Uhupalere452
+  external_links:
+  - rocket-chat/rocketchat:rocket
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: stefan125/sofia-service-hubot:master
+  links:
+  - wamp-router:wamp_router
+  stdin_open: true
+wamp-router:
+  ports:
+  - 8090:8080/tcp
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: crossbario/crossbar
+  stdin_open: true
