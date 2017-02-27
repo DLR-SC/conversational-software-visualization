@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: sofia-service-anwser
+Version: 0.1
+Summary: A service to answser to more info events 
+Home-page: https://github.com/B-Stefan/sofia
+Author: Stefan Bieliauskas
+Author-email: sb@conts.de
+License: Apache License 2.0
+Description: UNKNOWN
+Keywords: wamp,service
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Planning
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3.5
