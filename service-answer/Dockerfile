@@ -12,5 +12,5 @@ COPY . /usr/src/app
 RUN python setup.py install
 
 
-CMD [ "python", "question_service" ]
+CMD [ "python", "answer_service" ]
 
