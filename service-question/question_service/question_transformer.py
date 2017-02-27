@@ -4,7 +4,7 @@ import re
 from functools import reduce
 
 
-def recognize_project_request(message_text,channel_id):
+def recognize_project_request(message_text,channel_id,mention=False):
     """
     Try to find a project configuration event in a string
     :param message_text:
@@ -31,7 +31,7 @@ def recognize_project_request(message_text,channel_id):
         return None
 
 
-def recognize_namepsace(message_text, channel_id):
+def recognize_namepsace(message_text, channel_id,mention=False):
     """
     Try to find namespaces in the message
     :param message_text:
@@ -68,7 +68,7 @@ def recognize_namepsace(message_text, channel_id):
 
     return list(namespaces_events)
 
-def recognize_class_name(message_text, channel_id):
+def recognize_class_name(message_text, channel_id, mention=False):
     """
     Try to find class names (camelcase based)  in  a string
     :param message_text:
@@ -86,7 +86,7 @@ def recognize_class_name(message_text, channel_id):
     return list(events)
 
 
-def recognize_events_from_str(message_text, channel_id):
+def recognize_events_from_str(message_text, channel_id,mention=False):
     """
     Try to recognize as many as possible events from a string
     :param message_text:
@@ -96,9 +96,10 @@ def recognize_events_from_str(message_text, channel_id):
 
     events = list()
 
-    events.append(recognize_project_request(message_text,channel_id))
-    events.append(recognize_namepsace(message_text,channel_id))
-    events.append(recognize_class_name(message_text,channel_id))
+    events.append(recognize_project_request(message_text,channel_id,mention))
+    events.append(recognize_namepsace(message_text,channel_id,mention))
+    events.append(recognize_class_name(message_text,channel_id,mention))
+    events.append(recognize_more_info(message_text,channel_id,mention))
 
     # flattern event list (transfrom list [[{},{}],[{}],{}] into [{},{},{}]
     results = list()
@@ -113,3 +114,31 @@ def recognize_events_from_str(message_text, channel_id):
 
     #Return list of events
     return results
+
+def recognize_more_info(message_text, channel_id,mention):
+
+    text = message_text.lower()
+    if mention:
+        cases = [
+            "more info ",
+            "give me more ",
+            "info please ",
+            "information please",
+            "could you tell me more ",
+            "tell me more "
+        ]
+        if any(message_text.lower().find(s) <=0 for s in cases):
+
+            namespace = recognize_namepsace(message_text,channel_id,mention)
+            classes = recognize_class_name(message_text,channel_id,mention)
+            type = 'unknown'
+            if(len(namespace) >= 1):
+                type = 'namespace'
+            if(len(classes) >= 1):
+                type = 'class'
+
+            return {'channel': u'sofia.channel.{0}.messages.MoreInfo'.format(channel_id),
+                    'data': {'type': type}
+                    }
+        else:
+            return None

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from question_service.question_transformer import recognize_events_from_str,recognize_project_request, recognize_namepsace, recognize_class_name
+from question_service.question_transformer import recognize_events_from_str,recognize_project_request, recognize_namepsace, recognize_class_name,recognize_more_info
 class QuestionTransformer (TestCase):
 
     def test_recognizeProjectRequest(self):
@@ -86,3 +86,13 @@ class QuestionTransformer (TestCase):
         self.assertIsInstance(first["data"]["className"], str)
         self.assertEqual(first["data"]["className"], "LoginImplementation")
 
+
+    def test_more_info(self):
+        result = recognize_more_info("Tell me more", "test", True)
+        self.assertIsNotNone(result)
+        self.assertIsInstance(result,object)
+
+        result = recognize_more_info("Tell me more about namespace gui ", "test", True)
+        self.assertIsNotNone(result)
+        self.assertIsInstance(result, object)
+        self.assertEqual(result["data"]["type"], "namespace")
