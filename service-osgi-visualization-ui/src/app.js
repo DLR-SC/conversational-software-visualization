@@ -4,8 +4,15 @@ const metrics = require("osgi-visualization/src/bundles/metrics");
 const vis = require("osgi-visualization/src/bundles/vis");
 const d3 = require("osgi-visualization/lib/d3/d3");
 const utils = require("./utils");
+/**
+ * Class for the app
+ */
 class App {
 
+  /**
+   * Creates a new app instance
+   * @param options - The svgCanvas dom object and osgiAPI url as string
+   */
   constructor(options){
 
     options = options ? options : {};
@@ -23,6 +30,12 @@ class App {
   }
 
 
+  /**
+   * Loads the bundles form the serer and init the view for the user
+   * @param osgiApiUrl The server url
+   * @param svgCanvas The canvas dom object
+   * @returns {Promise.<[bundles, imExportGrpah]>}
+   */
   initBundleVis(osgiApiUrl, svgCanvas ){
 
     const bundlesPromise = fetch(osgiApiUrl + "/bundles?size=1000")
@@ -34,7 +47,6 @@ class App {
         .then((res)=>res.json());
 
     ImExportsGraphPromise.then((data)=>console.log(data));
-    window.displayNamespace = this.displayNamespace.bind(this);
 
     return Promise.all([bundlesPromise,ImExportsGraphPromise]).then((results)=>{
       let bundles = results[0];
@@ -49,10 +61,39 @@ class App {
       return [bundles,imExports]
     });
   }
+
+  /**
+   * Load the class list and
+   * @param osgiApiUrl
+   * @param svgCanvas
+   * @returns {Promise.<string>|Promise}
+   */
+  initClassVis(osgiApiUrl, svgCanvas ) {
+
+    const classPromise = fetch(osgiApiUrl + "/classes?size=1000")
+        .then((res) => res.json())
+        .then((data) => data._embedded)
+        .then((data) => data.classes);
+
+    return classPromise
+  }
+
+  /**
+   * trigger connection to the WAMP Router
+   * @param url - The WAMP server url
+   * @param relam - The WAMP Relam
+   * @returns {Promise}
+   */
   connectWamp(url, relam){
     return utils.connectToServer(url,relam,this.onJoin.bind(this)).catch(()=>console.error(arguments))
   }
 
+  /**
+   * Hook for the subscribe for the Namespace uri
+   * @param {Array<object>}msgArr - An array with the actual data
+   * @param obj - Meta objects
+   * @param event - The event object where you find the topic and other internal ids
+   */
   onNamespaceMessage(msgArr,obj,event){
     const channelId = utils.getChannelIdFromEvent(event);
     const msg = msgArr[0];
@@ -61,6 +102,10 @@ class App {
     this.displayNamespace(msg.namespace)
   }
 
+  /**
+   * Try to find a namespace in the bundle graph and displays tehm.
+   * @param {str}namespace - The namespace search string
+   */
   displayNamespace(namespace){
     this.initVisPromise.then((result)=>{
       const allBundles = result[0];
@@ -86,9 +131,29 @@ class App {
       }
     });
   }
+
+  /**
+   * Displays sthe classes
+   * @param class_name
+   */
+  displayClass(class_name){
+
+    this.initClassVis().then((classes)=>{
+
+      const class_entry = classes.filter((item)=>item.name.indexOf(class_name) >= 0);
+
+      vis.renderClassGraph(class_entry, svgCanvas);
+
+    })
+
+
+  }
   onJoin(session){
-      console.log("onJoin")
+      console.log("onJoin");
       session.subscribe("sofia.channel..messages.Namespace",this.onNamespaceMessage.bind(this),{ match: "wildcard" })
+          .then(()=>console.log("subscribed"))
+          .catch(()=>console.error("errror"));
+      session.subscribe("sofia.channel..messages.Class",this.onClassMessage.bind(this),{ match: "wildcard" })
           .then(()=>console.log("subscribed"))
           .catch(()=>console.error("errror"));
   }
