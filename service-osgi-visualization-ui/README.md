@@ -3,7 +3,7 @@
 
 ## Getting started
 
- You need access to the repository: http://gogs.dlr-gogs.default.conts.de/stefan/OSGiVisualization and set the following env. variables:
+ You need access to the repository: git://gitlab-ee.sc.dlr.de/group-distr-software-systems/osgi-visualization-d3.git and set the following env. variables:
 
  * gitUserName: xxxxxx
  * gitUserPass: xxxxxx
