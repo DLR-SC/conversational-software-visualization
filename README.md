@@ -1,4 +1,4 @@
-# A Conversational User Interface for \\Software Visualization 
+# A Conversational User Interface for Software Visualization 
 
 The Sofia project ( **So**ftware "**F**ramework" for **I**nteraction with Software **A**rchitecture) emerged during my bachelor thesis. It is a prototype implementation of a microservice architecture for chat bot interaction with source code visualizations.
 
